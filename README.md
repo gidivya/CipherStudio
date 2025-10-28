@@ -1,94 +1,124 @@
-# CipherStudio - Online Code Compiler
+# CipherStudio - Code Compiler & Gallery
 
-A full-stack application for compiling and executing code in multiple programming languages with MongoDB storage.
+A full-stack web application for writing, compiling, and sharing code snippets in multiple programming languages.
 
 ## Features
 
-- 🌟 Multi-language code editor (C++, Java, Python, C, JavaScript)
-- ⚡ Real-time code compilation and execution
-- 💾 Save and manage code snippets in MongoDB
-- 👥 User authentication and authorization
-- 🎨 Modern UI with Monaco Editor
-- 🐳 Docker support for easy deployment
+- **Code Editor**: Write and execute code in Python, C++, Java, C, and JavaScript
+- **User Authentication**: Register, login, and manage user accounts
+- **Code Gallery**: Save and share public code snippets
+- **Real-time Compilation**: Execute code and see results instantly
+- **Responsive Design**: Modern UI with dark theme
 
 ## Tech Stack
 
 ### Frontend
-- React.js
-- Monaco Editor for code editing
-- Tailwind CSS for styling
-- React Router for navigation
+- React 18
+- Tailwind CSS
+- Monaco Editor
+- React Router
+- Axios
+- React Hot Toast
 
 ### Backend
-- Node.js with Express.js
-- MongoDB for data storage
-- Mongoose for ODM
-- JWT for authentication
-- Child process execution for code compilation
-
-### Database
-- MongoDB (Local or Atlas)
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT Authentication
+- bcryptjs for password hashing
+- Express Validator
 
 ## Quick Start
 
-### Option 1: Using Docker (Recommended)
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (local or Atlas)
+- Git
 
-```bash
-# Start all services with Docker Compose
-docker-compose up --build
+### Local Development
 
-# Backend: http://localhost:5000
-# Frontend: http://localhost:3000
-# MongoDB: mongodb://localhost:27017
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd cipherstudioapp
+   ```
+
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   cp .env.template .env
+   # Edit .env with your MongoDB connection string
+   npm start
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+4. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend: http://localhost:5000
+
+## Deployment Guide
+
+### Frontend (Vercel) ✅ Already Deployed
+Your frontend is already deployed on Vercel. You just need to:
+1. Add environment variable: `REACT_APP_API_URL` = your backend URL
+2. Redeploy
+
+### Backend Deployment Options
+
+#### Option 1: Heroku (Recommended)
+1. Install Heroku CLI
+2. Login: `heroku login`
+3. Create app: `heroku create your-app-name`
+4. Set environment variables:
+   ```bash
+   heroku config:set MONGODB_URI="your-mongodb-atlas-connection-string"
+   heroku config:set JWT_SECRET="your-secure-random-string"
+   heroku config:set FRONTEND_URL="https://your-vercel-app.vercel.app"
+   ```
+5. Deploy: `git push heroku main`
+
+#### Option 2: Railway
+1. Connect GitHub repository
+2. Select backend folder
+3. Set environment variables in dashboard
+4. Deploy automatically
+
+#### Option 3: Render
+1. Create Web Service
+2. Connect repository
+3. Set build/start commands
+4. Configure environment variables
+
+### Database Setup (MongoDB Atlas)
+
+1. **Create Account**: Sign up at [MongoDB Atlas](https://mongodb.com/atlas)
+2. **Create Cluster**: Choose free tier
+3. **Create User**: Database user with read/write access
+4. **Whitelist IPs**: Add 0.0.0.0/0 for all IPs (or specific ones)
+5. **Get Connection String**: Copy the connection string
+
+## Environment Variables
+
+### Backend (.env)
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/cipherstudio?retryWrites=true&w=majority
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_EXPIRY=7d
+PORT=5000
+NODE_ENV=production
+FRONTEND_URL=https://your-vercel-app.vercel.app
 ```
 
-### Option 2: Manual Setup
-
-#### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB installed locally
-- GCC, Java, Python compilers installed
-
-#### Backend Setup
-
-```bash
-cd backend
-npm install
-cp .env.example .env
-# Edit .env with your MongoDB URI
-npm start
-```
-
-#### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-Access the application at http://localhost:3000
-
-## Project Structure
-
-```
-cipherstudioapp/
-├── backend/
-│   ├── src/
-│   │   ├── models/        # MongoDB models
-│   │   ├── routes/        # API routes
-│   │   ├── services/      # Compiler service
-│   │   └── config/        # Database config
-│   ├── temp/             # Temporary code files
-│   └── package.json
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── App.js
-│   │   └── index.js
-│   └── package.json
-├── docker-compose.yml
-└── README.md
+### Frontend (.env)
+```env
+REACT_APP_API_URL=https://your-backend-url.herokuapp.com
 ```
 
 ## API Endpoints
@@ -98,95 +128,96 @@ cipherstudioapp/
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/me` - Get current user
 
-### Code Compilation
-- `POST /api/compile/execute` - Execute code
-- `POST /api/compile/compile` - Compile code only
-
-### Code Snippets
-- `GET /api/code` - Get all public snippets
-- `POST /api/code` - Create new snippet
-- `GET /api/code/:id` - Get specific snippet
-- `PUT /api/code/:id` - Update snippet
-- `DELETE /api/code/:id` - Delete snippet
-
-### Users
-- `GET /api/users` - Get all users
-- `GET /api/users/:id` - Get specific user
-
-## Environment Variables
-
-### Backend (.env)
-
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/cipherstudio
-NODE_ENV=development
-JWT_SECRET=your-secret-key
-JWT_EXPIRY=7d
-
-# Optional: Compiler paths
-GCC_PATH=/usr/bin/gcc
-GPP_PATH=/usr/bin/g++
-JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-PYTHON_PATH=/usr/bin/python3
-```
-
-## Supported Languages
-
-- ✅ Python
-- ✅ C++
-- ✅ Java
-- ✅ C
-- ✅ JavaScript
-
-## Features in Detail
-
-### Code Editor
-- Syntax highlighting
-- Auto-completion
-- Multi-language support
-- Line numbers
-- Theme customization
+### Code Management
+- `GET /api/code` - Get public code snippets
+- `POST /api/code` - Create new code snippet (auth required)
+- `PUT /api/code/:id` - Update code snippet (auth required)
+- `DELETE /api/code/:id` - Delete code snippet (auth required)
 
 ### Code Execution
-- Secure code execution
-- Timeout protection (10 seconds)
-- Input/output handling
-- Error reporting
+- `POST /api/compile/execute` - Execute code
 
-### MongoDB Storage
-- User management
-- Code snippet storage
-- Execution history
-- Public/private snippets
+## Project Structure
 
-## Development
-
-```bash
-# Install all dependencies
-npm install
-
-# Run backend in development mode
-cd backend && npm run dev
-
-# Run frontend in development mode
-cd frontend && npm start
 ```
+cipherstudioapp/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── server.js
+│   ├── package.json
+│   ├── Procfile
+│   └── .env.template
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── config/
+│   │   └── App.js
+│   └── package.json
+├── DEPLOYMENT.md
+└── README.md
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **CORS Errors**
+   - Ensure `FRONTEND_URL` matches your Vercel URL exactly
+   - Check that backend is receiving requests from correct origin
+
+2. **Database Connection**
+   - Verify MongoDB connection string
+   - Check IP whitelist in Atlas
+   - Ensure user has proper permissions
+
+3. **Authentication Issues**
+   - Verify JWT_SECRET is set
+   - Check token format in requests
+   - Ensure backend is running
+
+4. **Code Snippets Not Appearing**
+   - Check if snippets are marked as public
+   - Verify database connection
+   - Check backend logs for errors
+
+### Debug Steps
+1. Check backend logs in hosting platform
+2. Use browser dev tools to inspect network requests
+3. Test API endpoints with Postman/curl
+4. Verify environment variables are set correctly
+
+## Security Notes
+
+- Use strong, unique JWT secrets in production
+- Enable HTTPS for both frontend and backend
+- Restrict MongoDB Atlas IP whitelist appropriately
+- Use environment variables for all sensitive data
+- Consider implementing rate limiting
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-MIT
+MIT License - see LICENSE file for details
 
-## Credits
+## Support
 
-Built as a full-stack project using MongoDB for storage.
+For deployment issues, check:
+- Backend logs for error messages
+- Frontend console for JavaScript errors
+- Network tab for failed API requests
+- Environment variable configuration
 
-
+Remember to replace placeholder URLs and secrets with your actual values!

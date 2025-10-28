@@ -3,6 +3,7 @@ import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
+import { API_ENDPOINTS } from '../config/api';
 
 const CodeEditor = () => {
   const [code, setCode] = useState('');
@@ -38,7 +39,7 @@ const CodeEditor = () => {
     setOutput('');
     
     try {
-      const response = await axios.post('http://localhost:5000/api/compile/execute', {
+      const response = await axios.post(API_ENDPOINTS.COMPILE.EXECUTE, {
         code,
         language,
         input
@@ -69,7 +70,7 @@ const CodeEditor = () => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/code', {
+      const response = await axios.post(API_ENDPOINTS.CODE.BASE, {
         title,
         description,
         code,

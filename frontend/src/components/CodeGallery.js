@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { API_ENDPOINTS } from '../config/api';
 
 const CodeGallery = () => {
   const [snippets, setSnippets] = useState([]);
@@ -12,7 +13,7 @@ const CodeGallery = () => {
 
   const fetchSnippets = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/code');
+      const response = await axios.get(API_ENDPOINTS.CODE.BASE);
       setSnippets(response.data.snippets);
     } catch (error) {
       toast.error('Failed to load code snippets');
